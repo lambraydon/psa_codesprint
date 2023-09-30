@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:psa_codesprint/widgets/navigation_bar_desktop.dart";
-import "package:psa_codesprint/widgets/navigation_bar_mobile.dart";
+import 'package:psa_codesprint/widgets/navBar/navigation_bar_desktop.dart';
+import 'package:psa_codesprint/widgets/navBar/navigation_bar_mobile.dart';
 import "package:responsive_builder/responsive_builder.dart";
 
 class NavBar extends StatelessWidget {
