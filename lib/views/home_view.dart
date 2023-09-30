@@ -1,33 +1,16 @@
 import "package:flutter/material.dart";
-import "package:psa_codesprint/widgets/call_to_action.dart";
-import "package:psa_codesprint/widgets/centered_view.dart";
-import "package:psa_codesprint/widgets/details.dart";
-import "package:psa_codesprint/widgets/navigation_bar.dart";
+import "package:psa_codesprint/views/home_content_desktop.dart";
+import "package:psa_codesprint/views/home_content_mobile.dart";
+import "package:responsive_builder/responsive_builder.dart";
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
-      body: CenteredView(
-        child: Column(
-          children: [
-            NavBar(),
-            Expanded(child: Row(children: [
-              Details(),
-              Expanded(child: Center(child: Row(
-                children: [
-                  CallToAction("Applicants"),
-                  SizedBox(width: 10,),
-                  CallToAction("Existing Employees")
-                ],
-              ),))
-            ],))
-          ],
-        ),
-      ),
+    return ScreenTypeLayout.builder(
+      mobile: (BuildContext context) => const HomeContentMobile(),
+      desktop: (BuildContext context) => const HomeContentDesktop(),
     );
   }
 }
