@@ -16,7 +16,7 @@ class HomeContentMobile extends StatelessWidget {
         SizedBox(height: 100,),
         CallToAction('Applicants', ApplicantsRoute),
         SizedBox(height: 5,),
-        CallToAction("Existing Employees", ApplicantsRoute)
+        CallToAction("Existing Employees", EmployeesRoute)
       ],
     );
   }
