@@ -5,6 +5,7 @@ import 'package:psa_codesprint/views/home_view.dart';
 
 import '../views/about_view.dart';
 import '../views/courses_view.dart';
+import '../views/employees_view/employees_view.dart';
 
 Route<dynamic>? generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -16,6 +17,8 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       return _getPageRoute(const CoursesView());
     case ApplicantsRoute:
       return _getPageRoute(const ApplicantsView());
+    case EmployeesRoute:
+      return _getPageRoute(const EmployeesView());
     default:
   }
 }

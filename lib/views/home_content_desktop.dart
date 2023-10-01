@@ -15,7 +15,7 @@ class HomeContentDesktop extends StatelessWidget {
         children: [
           CallToAction("Applicants", ApplicantsRoute),
           SizedBox(width: 10,),
-          CallToAction("Existing Employees", ApplicantsRoute)
+          CallToAction("Existing Employees", EmployeesRoute)
         ],
       ),))
     ],);

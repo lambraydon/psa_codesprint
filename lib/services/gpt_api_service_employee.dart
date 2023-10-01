@@ -4,15 +4,15 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../views/applicants_view/api_constants_applicants.dart';
-import '../views/applicants_view/applicant_evaluation_model.dart';
+import '../views/employees_view/employee_evaluation_model.dart';
 
 
-class GPTApiService {
+class GPTApiServiceEmployee {
   final http.Client httpClient;
 
-  GPTApiService({required this.httpClient});
+  GPTApiServiceEmployee({required this.httpClient});
 
-  Future<RecommenderModel> sendMessage(
+  Future<EmployeeRecommenderModel> sendMessage(
       {required String message, required String modelId}) async {
     try {
       String newMessage = "$message\n$CONDITION";
@@ -51,7 +51,7 @@ class GPTApiService {
       }
 
       Map output = jsonDecode(jsonResponse['choices'][0]['message']['content']);
-      return RecommenderModel.fromJson(output);
+      return EmployeeRecommenderModel.fromJson(output);
     } catch (error) {
       log("error $error");
       rethrow;
