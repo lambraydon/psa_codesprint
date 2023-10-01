@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/services.dart';
 import 'package:psa_codesprint/applicant_fit_score.dart';
 import 'package:psa_codesprint/views/applicants_view/applicant_evaluation_model.dart';
-
+import "package:syncfusion_flutter_pdf/pdf.dart";
 import '../../services/gpt_api_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +32,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
 
   // HintText
   String hintText =
-      'Recommend me a one hour long workout targeting the back, shoulders and triceps';
+      'Input resume text';
 
   RecommenderModel model = RecommenderModel(
       totalScore: 0,
@@ -48,6 +49,25 @@ class _ApplicantsViewState extends State<ApplicantsView> {
     super.dispose();
   }
 
+  Future<List<int>> _readDocumentData() async {
+    final ByteData data = await rootBundle.load('assets/sampleResume.pdf');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+  Future<void> _extractText () async {
+    //Load an existing PDF document.
+    PdfDocument document =
+    PdfDocument(inputBytes: await _readDocumentData());
+//Create a new instance of the PdfTextExtractor.
+    PdfTextExtractor extractor = PdfTextExtractor(document);
+
+//Extract all the text from the document.
+    String text = extractor.extractText();
+
+//Display the text.
+    inputController.text = text;
+  }
+
   void changeTheme() {
     weight = FontWeight.bold;
     size = 15;
@@ -60,7 +80,8 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       _focusNode.unfocus();
 
       if (inputController.text.isEmpty) {
-        inputController.text = hintText;
+        _readDocumentData();
+        _extractText();
       }
       changeTheme();
       _isLoading = true;
