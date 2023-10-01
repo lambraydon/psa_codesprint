@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:psa_codesprint/routing/route_names.dart';
+import 'package:psa_codesprint/views/applicants_view/applicants_view.dart';
 import 'package:psa_codesprint/views/home_view.dart';
 
 import '../views/about_view.dart';
@@ -13,6 +14,8 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       return _getPageRoute(const AboutView());
     case CoursesRoute:
       return _getPageRoute(const CoursesView());
+    case ApplicantsRoute:
+      return _getPageRoute(const ApplicantsView());
     default:
   }
 }
