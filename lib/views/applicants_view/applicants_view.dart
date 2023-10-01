@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:psa_codesprint/applicant_fit_score.dart';
+import 'package:psa_codesprint/custom_text_button.dart';
 import 'package:psa_codesprint/views/applicants_view/applicant_evaluation_model.dart';
 import "package:syncfusion_flutter_pdf/pdf.dart";
 import '../../services/gpt_api_service.dart';
@@ -39,7 +40,9 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       impactScore: 0,
       competencyScore: 0,
       experienceScore: 0,
-      description: "Oops an error occured, please try again");
+      description: "Oops an error occured, please try again",
+      rejection: "Oops an error occured, please try again",
+      shortlist: "Oops an error occured, please try again");
 
   String description = "Oops an error occured, please try again";
 
@@ -87,7 +90,6 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       _isLoading = true;
     });
 
-
     // API call to GPT model
     try {
       model = await GPTApiService(httpClient: http.Client())
@@ -103,6 +105,37 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       _isLoading = false;
       _showNewWidget = true;
       log("reached");
+    });
+  }
+
+  void _copyRejectionToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Rejection email draft copied to clipboard',
+            style: TextStyle(fontSize: 20.0), // Set the text size to 14.0
+          ),
+          backgroundColor: Colors.redAccent
+          , // Set the background color to light green
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    });
+  }
+
+  void _copyShorlistToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Shortlist email draft copied to clipboard',
+            style: TextStyle(fontSize: 20.0), // Set the text size to 14.0
+          ),
+          backgroundColor: Colors.greenAccent, // Set the background color to light green
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     });
   }
 
@@ -200,9 +233,9 @@ class _ApplicantsViewState extends State<ApplicantsView> {
                                           isRepeatingAnimation: false,
                                           repeatForever: false,
                                           animatedTexts: [
-                                            TyperAnimatedText(
-                                                description,
-                                                speed: const Duration(milliseconds: 10),
+                                            TyperAnimatedText(description,
+                                                speed: const Duration(
+                                                    milliseconds: 10),
                                                 textStyle: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15)),
@@ -217,14 +250,58 @@ class _ApplicantsViewState extends State<ApplicantsView> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: AnimatedOpacity(
-                                        opacity: _showApplicantScore ? 1.0 : 0.0,
-                                        duration:
-                                            const Duration(milliseconds: 800),
-                                        curve: Curves.easeIn,
-                                        child: _showApplicantScore
-                                            ? ApplicantFitScore(model.totalScore)
-                                            : const SizedBox.shrink(),
+                                      child: Column(
+                                        children: [
+                                          AnimatedOpacity(
+                                            opacity:
+                                                _showApplicantScore ? 1.0 : 0.0,
+                                            duration: const Duration(
+                                                milliseconds: 800),
+                                            curve: Curves.easeIn,
+                                            child: _showApplicantScore
+                                                ? ApplicantFitScore(
+                                                    model.totalScore)
+                                                : const SizedBox.shrink(),
+                                          ),
+                                          Row(
+                                            children: [
+                                              AnimatedOpacity(
+                                                opacity: _showApplicantScore
+                                                    ? 1.0
+                                                    : 0.0,
+                                                duration: const Duration(
+                                                    milliseconds: 800),
+                                                curve: Curves.easeIn,
+                                                child: _showApplicantScore
+                                                    ? CustomTextButton(
+                                                        onPressed: () {
+                                                          _copyRejectionToClipboard(
+                                                              model.rejection);
+                                                        },
+                                                        buttonText: "Reject",
+                                                        color: Colors.red)
+                                                    : const SizedBox.shrink(),
+                                              ),
+                                              AnimatedOpacity(
+                                                opacity: _showApplicantScore
+                                                    ? 1.0
+                                                    : 0.0,
+                                                duration: const Duration(
+                                                    milliseconds: 800),
+                                                curve: Curves.easeIn,
+                                                child: _showApplicantScore
+                                                    ? CustomTextButton(
+                                                    onPressed: () {
+                                                      _copyShorlistToClipboard(
+                                                          model.shortlist);
+                                                    },
+                                                    buttonText: "Shortlist",
+                                                    color: Colors.green)
+                                                    : const SizedBox.shrink(),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
