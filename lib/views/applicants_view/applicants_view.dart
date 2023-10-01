@@ -7,6 +7,7 @@ import 'package:psa_codesprint/views/applicants_view/applicant_fit_score.dart';
 import 'package:psa_codesprint/custom_text_button.dart';
 import 'package:psa_codesprint/services/PDFUtil/pdfuploader.dart';
 import 'package:psa_codesprint/views/applicants_view/applicant_evaluation_model.dart';
+import 'package:psa_codesprint/widgets/constants.dart';
 import "package:syncfusion_flutter_pdf/pdf.dart";
 import '../../services/gpt_api_service.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -22,8 +23,6 @@ class ApplicantsView extends StatefulWidget {
 class _ApplicantsViewState extends State<ApplicantsView> {
   TextEditingController inputController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late String input;
-
 
   bool _isLoading = false;
   bool _showNewWidget = false;
@@ -63,21 +62,20 @@ class _ApplicantsViewState extends State<ApplicantsView> {
 
   Future<void> _extractText() async {
     // Load an existing PDF document.
-    PdfDocument document =
-    PdfDocument(inputBytes: await _readDocumentData());
+    PdfDocument document = PdfDocument(inputBytes: await _readDocumentData());
     // Create a new instance of the PdfTextExtractor.
     PdfTextExtractor extractor = PdfTextExtractor(document);
     // Extract all the text from the document.
     String text = extractor.extractText();
     // Display the text.
-    input = text;
+    inputController.text = text;
   }
 
   void changeTheme() {
     weight = FontWeight.bold;
     size = 15;
-    filled = Colors.lightGreenAccent;
-    text = Colors.black12;
+    filled = Colors.greenAccent;
+    text = Colors.black;
   }
 
   void _onGenerateAssessmentPressed() async {
@@ -94,8 +92,10 @@ class _ApplicantsViewState extends State<ApplicantsView> {
 
     // API call to GPT model
     try {
+      String message =
+          "resume: ${inputController.text}\njob application description: Software Engineer at Port Singapore Authority";
       model = await GPTApiService(httpClient: http.Client())
-          .sendMessage(message: input, modelId: "gpt-3.5-turbo");
+          .sendMessage(message: message, modelId: "gpt-3.5-turbo");
       log(model.description);
     } catch (error) {
       log("reached here error");
@@ -120,10 +120,9 @@ class _ApplicantsViewState extends State<ApplicantsView> {
           backgroundColor: Colors.redAccent,
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 50,
-            left: 10,
-            right: 10
-          ),
+              bottom: MediaQuery.of(context).size.height - 50,
+              left: 10,
+              right: 10),
         ),
       );
     });
@@ -132,7 +131,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
   void _copyShortlistToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+        SnackBar(
           content: const Text(
             'Shortlist email draft copied to clipboard',
             style: TextStyle(fontSize: 20.0),
@@ -142,8 +141,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
           margin: EdgeInsets.only(
               bottom: MediaQuery.of(context).size.height - 50,
               left: 10,
-              right: 10
-          ),
+              right: 10),
         ),
       );
     });
@@ -173,12 +171,14 @@ class _ApplicantsViewState extends State<ApplicantsView> {
                 Expanded(
                   child: Column(
                     children: [
-                      const Text("Job Description",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
+                      const Text(
+                        "Job Description",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: TextField(
-                          maxLength: 400,
                           controller: inputController,
                           focusNode: _focusNode,
                           style: TextStyle(
@@ -215,7 +215,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 16.0),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
@@ -246,111 +246,108 @@ class _ApplicantsViewState extends State<ApplicantsView> {
               curve: Curves.easeIn,
               child: _showNewWidget
                   ? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AnimatedTextKit(
-                                isRepeatingAnimation: false,
-                                repeatForever: false,
-                                animatedTexts: [
-                                  TyperAnimatedText(
-                                    description,
-                                    speed:
-                                    const Duration(milliseconds: 10),
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AnimatedTextKit(
+                                      isRepeatingAnimation: false,
+                                      repeatForever: false,
+                                      animatedTexts: [
+                                        TyperAnimatedText(
+                                          description,
+                                          speed:
+                                              const Duration(milliseconds: 10),
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                      onFinished: () {
+                                        setState(() {
+                                          _showApplicantScore = true;
+                                        });
+                                      },
                                     ),
                                   ),
-                                ],
-                                onFinished: () {
-                                  setState(() {
-                                    _showApplicantScore = true;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                AnimatedOpacity(
-                                  opacity:
-                                  _showApplicantScore ? 1.0 : 0.0,
-                                  duration: const Duration(
-                                      milliseconds: 800),
-                                  curve: Curves.easeIn,
-                                  child: _showApplicantScore
-                                      ? ApplicantFitScore(
-                                    model.totalScore,
-                                  )
-                                      : const SizedBox.shrink(),
                                 ),
-                                Row(
-                                  children: [
-                                    AnimatedOpacity(
-                                      opacity: _showApplicantScore
-                                          ? 1.0
-                                          : 0.0,
-                                      duration: const Duration(
-                                          milliseconds: 800),
-                                      curve: Curves.easeIn,
-                                      child: _showApplicantScore
-                                          ? CustomTextButton(
-                                        onPressed: () {
-                                          _copyRejectionToClipboard(
-                                            model.rejection,
-                                          );
-                                        },
-                                        buttonText: "Reject",
-                                        color: Colors.red,
-                                      )
-                                          : const SizedBox.shrink(),
-                                    ),
-                                    AnimatedOpacity(
-                                      opacity: _showApplicantScore
-                                          ? 1.0
-                                          : 0.0,
-                                      duration: const Duration(
-                                          milliseconds: 800),
-                                      curve: Curves.easeIn,
-                                      child: _showApplicantScore
-                                          ? CustomTextButton(
-                                        onPressed: () {
-                                          _copyShortlistToClipboard(
-                                            model.shortlist,
-                                          );
-                                        },
-                                        buttonText: "Shortlist",
-                                        color: Colors.green,
-                                      )
-                                          : const SizedBox.shrink(),
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      AnimatedOpacity(
+                                        opacity:
+                                            _showApplicantScore ? 1.0 : 0.0,
+                                        duration:
+                                            const Duration(milliseconds: 800),
+                                        curve: Curves.easeIn,
+                                        child: _showApplicantScore
+                                            ? ApplicantFitScore(
+                                                model.totalScore,
+                                              )
+                                            : const SizedBox.shrink(),
+                                      ),
+                                      Row(
+                                        children: [
+                                          AnimatedOpacity(
+                                            opacity:
+                                                _showApplicantScore ? 1.0 : 0.0,
+                                            duration: const Duration(
+                                                milliseconds: 800),
+                                            curve: Curves.easeIn,
+                                            child: _showApplicantScore
+                                                ? CustomTextButton(
+                                                    onPressed: () {
+                                                      _copyRejectionToClipboard(
+                                                        model.rejection,
+                                                      );
+                                                    },
+                                                    buttonText: "Reject",
+                                                    color: Colors.red,
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ),
+                                          AnimatedOpacity(
+                                            opacity:
+                                                _showApplicantScore ? 1.0 : 0.0,
+                                            duration: const Duration(
+                                                milliseconds: 800),
+                                            curve: Curves.easeIn,
+                                            child: _showApplicantScore
+                                                ? CustomTextButton(
+                                                    onPressed: () {
+                                                      _copyShortlistToClipboard(
+                                                        model.shortlist,
+                                                      );
+                                                    },
+                                                    buttonText: "Shortlist",
+                                                    color: Colors.green,
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              )
+                    )
                   : const SizedBox.shrink(),
             ),
             const SizedBox(

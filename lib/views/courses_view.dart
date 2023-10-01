@@ -17,7 +17,7 @@ class CoursesView extends StatelessWidget {
         CourseTile(coursename: "Port Operation and Management", imagepath: "assets/portpng.png"),
         CourseTile(coursename: "Data Visualisation with R", imagepath: "assets/Rpng.jpg"),
         CourseTile(coursename: "Workplace Safety", imagepath: "assets/safetypng.jpg"),
-        CourseTile(coursename: "Warehouse and Logistics Management", imagepath: "assets/warehouse png.png"),
+        CourseTile(coursename: "Logistics Management", imagepath: "assets/warehouse png.png"),
         CourseTile(coursename: "Programming with Java", imagepath: "assets/javapng.png"),
 
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:psa_codesprint/widgets/constants.dart';
 
 import '../locator.dart';
 import '../services/navigation_service.dart';
@@ -19,7 +20,7 @@ class CallToAction extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 31, 229, 146),
+          color: primaryColor,
         borderRadius: BorderRadius.circular(5)),
         child: Align(
           alignment: Alignment.center,

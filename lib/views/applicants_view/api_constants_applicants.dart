@@ -1,5 +1,5 @@
 String BASE_URL = "https://api.openai.com/v1/chat";
-String API_KEY = "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";
+String API_KEY = "INSERT API KEY HERE";
 String PROMPT = '''
 
 Create a JSON representation of a resume evaluation with the following fields: 

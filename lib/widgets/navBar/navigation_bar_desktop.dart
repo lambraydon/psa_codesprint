@@ -18,6 +18,10 @@ class NavigationBarDesktop extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              NavBarItem("Home", HomeRoute),
+              SizedBox(
+                width: 60,
+              ),
               NavBarItem("Courses", CoursesRoute),
               SizedBox(
                 width: 60,

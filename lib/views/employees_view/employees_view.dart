@@ -5,11 +5,13 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:psa_codesprint/services/PDFUtil/pdfuploader.dart';
 import 'package:psa_codesprint/views/employees_view/employee_evaluation_model.dart';
+import 'package:psa_codesprint/views/employees_view/recommended_courses.dart';
 import "package:syncfusion_flutter_pdf/pdf.dart";
 import 'package:dotted_border/dotted_border.dart';
 import 'package:http/http.dart' as http;
 
 import '../../services/gpt_api_service_employee.dart';
+import '../../widgets/constants.dart';
 
 class EmployeesView extends StatefulWidget {
   const EmployeesView({Key? key}) : super(key: key);
@@ -24,7 +26,7 @@ class _EmployeesViewState extends State<EmployeesView> {
 
   bool _isLoading = false;
   bool _showNewWidget = false;
-  bool _showCourses = false;
+  bool _showApplicantScore = false;
 
   // Textstyles
   FontWeight weight = FontWeight.normal;
@@ -66,8 +68,8 @@ class _EmployeesViewState extends State<EmployeesView> {
   void changeTheme() {
     weight = FontWeight.bold;
     size = 15;
-    filled = Colors.lightGreenAccent;
-    text = Colors.black12;
+    filled = Colors.greenAccent;
+    text = Colors.black;
   }
 
   void _onGenerateAssessmentPressed() async {
@@ -84,8 +86,10 @@ class _EmployeesViewState extends State<EmployeesView> {
 
     // API call to GPT model
     try {
+      String message =
+          "resume: ${inputController.text}\njob application description: Software Engineer at Port Singapore Authority";
       model = await GPTApiServiceEmployee(httpClient: http.Client())
-          .sendMessage(message: inputController.text, modelId: "gpt-3.5-turbo");
+          .sendMessage(message: message, modelId: "gpt-3.5-turbo");
       log(model.description);
     } catch (error) {
       log("reached here error");
@@ -114,7 +118,7 @@ class _EmployeesViewState extends State<EmployeesView> {
                 DottedBorder(
                   color: Colors.lightBlueAccent,
                   strokeWidth: 1,
-                  radius: const Radius.circular(16),
+                  radius: Radius.circular(16),
                   child: Container(
                     height: 200,
                     width: 500,
@@ -132,7 +136,6 @@ class _EmployeesViewState extends State<EmployeesView> {
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: TextField(
-                          maxLength: 400,
                           controller: inputController,
                           focusNode: _focusNode,
                           style: TextStyle(
@@ -169,7 +172,7 @@ class _EmployeesViewState extends State<EmployeesView> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 16.0),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
@@ -231,7 +234,7 @@ class _EmployeesViewState extends State<EmployeesView> {
                                       ],
                                       onFinished: () {
                                         setState(() {
-                                          _showCourses = true;
+                                          _showApplicantScore = true;
                                         });
                                       },
                                     ),
@@ -242,12 +245,13 @@ class _EmployeesViewState extends State<EmployeesView> {
                                   child: Column(
                                     children: [
                                       AnimatedOpacity(
-                                        opacity: _showCourses ? 1.0 : 0.0,
+                                        opacity:
+                                            _showApplicantScore ? 1.0 : 0.0,
                                         duration:
                                             const Duration(milliseconds: 800),
                                         curve: Curves.easeIn,
-                                        child: _showCourses
-                                            ? const Text("Courses available")
+                                        child: _showApplicantScore
+                                            ? RecommendedCourses()
                                             : const SizedBox.shrink(),
                                       ),
                                     ],
