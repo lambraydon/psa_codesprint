@@ -5,6 +5,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:psa_codesprint/applicant_fit_score.dart';
 import 'package:psa_codesprint/custom_text_button.dart';
+import 'package:psa_codesprint/services/PDFUtil/pdfuploader.dart';
 import 'package:psa_codesprint/views/applicants_view/applicant_evaluation_model.dart';
 import "package:syncfusion_flutter_pdf/pdf.dart";
 import '../../services/gpt_api_service.dart';
@@ -149,6 +150,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       },
       child: Scaffold(
         body: ListView(children: [
+          pdfuploader(),
           Center(
             child: Column(
               children: [
