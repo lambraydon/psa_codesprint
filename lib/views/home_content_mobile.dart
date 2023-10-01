@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:psa_codesprint/routing/route_names.dart';
 import 'package:psa_codesprint/widgets/call_to_action.dart';
 import 'package:psa_codesprint/widgets/details.dart';
 
@@ -13,9 +14,9 @@ class HomeContentMobile extends StatelessWidget {
       children: [
         Details(),
         SizedBox(height: 100,),
-        CallToAction('Applicants'),
+        CallToAction('Applicants', ApplicantsRoute),
         SizedBox(height: 5,),
-        CallToAction("Existing Employees")
+        CallToAction("Existing Employees", ApplicantsRoute)
       ],
     );
   }

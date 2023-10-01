@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:psa_codesprint/routing/route_names.dart';
 
 import '../widgets/call_to_action.dart';
 import '../widgets/details.dart';
@@ -12,9 +13,9 @@ class HomeContentDesktop extends StatelessWidget {
       Details(),
       Expanded(child: Center(child: Row(
         children: [
-          CallToAction("Applicants"),
+          CallToAction("Applicants", ApplicantsRoute),
           SizedBox(width: 10,),
-          CallToAction("Existing Employees")
+          CallToAction("Existing Employees", ApplicantsRoute)
         ],
       ),))
     ],);
