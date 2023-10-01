@@ -22,6 +22,8 @@ class ApplicantsView extends StatefulWidget {
 class _ApplicantsViewState extends State<ApplicantsView> {
   TextEditingController inputController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  late String input;
+
 
   bool _isLoading = false;
   bool _showNewWidget = false;
@@ -68,7 +70,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
     // Extract all the text from the document.
     String text = extractor.extractText();
     // Display the text.
-    inputController.text = text;
+    input = text;
   }
 
   void changeTheme() {
@@ -93,7 +95,7 @@ class _ApplicantsViewState extends State<ApplicantsView> {
     // API call to GPT model
     try {
       model = await GPTApiService(httpClient: http.Client())
-          .sendMessage(message: inputController.text, modelId: "gpt-3.5-turbo");
+          .sendMessage(message: input, modelId: "gpt-3.5-turbo");
       log(model.description);
     } catch (error) {
       log("reached here error");
@@ -126,7 +128,6 @@ class _ApplicantsViewState extends State<ApplicantsView> {
       );
     });
   }
-
 
   void _copyShortlistToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
